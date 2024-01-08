@@ -1,0 +1,3 @@
+---
+- include_tasks: cmdline_option.yaml
+  with_items: "{{ raspberry_pi_cmdline_options }}"

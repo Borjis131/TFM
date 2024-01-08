@@ -1,0 +1,4 @@
+---
+- name: Reboot Raspberry Pi
+  become: true
+  ansible.builtin.reboot:

@@ -1,0 +1,15 @@
+---
+- name: "Check if {{ item }} option is present"
+  ansible.builtin.lineinfile:
+    dest: /boot/cmdline.txt
+    regexp: "{{ item }}"
+    state: absent
+  check_mode: yes
+  changed_when: false
+  register: result
+
+- name: "Add {{ item }} option"
+  become: true
+  ansible.builtin.shell: sed -i "s/$/ {{ item }}/" /boot/cmdline.txt
+  when: result.found == 0
+  notify: Reboot Raspberry Pi
