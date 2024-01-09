@@ -1,0 +1,37 @@
+---
+- name: Ensure containerd config directory exists
+  ansible.builtin.file:
+    path: /etc/containerd
+    state: directory
+
+- name: Get containerd's default configuration
+  ansible.builtin.command: containerd config default
+  register: containerd_config_default
+
+- name: Copy containerd's default configuration to /tmp/containerd_config.toml
+  become: yes
+  ansible.builtin.copy:
+    dest: /tmp/containerd_config.toml
+    content: "{{ containerd_config_default.stdout }}"
+
+- name: Set cgroup driver to systemd
+  become: yes
+  ansible.builtin.replace:
+    path: /tmp/containerd_config.toml
+    regexp: '(\t*SystemdCgroup) = false$'
+    replace: '\1 = true'
+  when: containerd_config_cgroup_driver == "systemd"
+
+- name: Copy containerd's edited configuration to /etc/containerd
+  become: yes
+  ansible.builtin.copy:
+    src: /tmp/containerd_config.toml
+    dest: /etc/containerd/config.toml
+    remote_src: true
+  notify: Restart containerd
+
+- name: Remove containerd's modified config file from /tmp
+  become: yes
+  ansible.builtin.file:
+    path: /tmp/containerd_config.toml
+    state: absent

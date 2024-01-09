@@ -1,0 +1,44 @@
+---
+- name: Update the apt package index
+  become: yes
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install packages to allow apt to use a repository over HTTPS
+  become: yes
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - gnupg
+    state: present
+
+- name: Ensure the keyrings directory exists
+  become: yes
+  ansible.builtin.file:
+    path: "{{ apt_keyrings_dir }}"
+    mode: "0755"
+    state: directory
+
+- name: Add Docker's official GPG key
+  become: yes
+  ansible.builtin.apt_key:
+    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+    url: "https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg"
+    keyring: "{{ apt_keyrings_dir }}/docker.gpg"
+    state: present
+
+- name: Set up Docker's repository
+  become: yes
+  ansible.builtin.apt_repository:
+    repo: "deb [arch={{ apt_docker_arch }} signed-by={{ apt_keyrings_dir }}/docker.gpg] https://download.docker.com/linux/{{ ansible_distribution | lower }} \
+    {{ ansible_distribution_release }} {{ apt_docker_release_channel }}"
+    filename: docker
+    update_cache: yes
+    state: present
+
+- name: Install containerd using apt
+  become: yes
+  ansible.builtin.apt:
+    name: containerd.io
+    state: present
