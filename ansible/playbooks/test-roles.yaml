@@ -1,0 +1,5 @@
+---
+- hosts: node3
+  roles:
+    - raspberry-pi
+    - containerd
