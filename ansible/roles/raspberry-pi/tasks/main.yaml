@@ -1,3 +1,7 @@
 ---
-- include_tasks: cmdline_option.yaml
+- name: Configure Raspberry Pi cmdline.txt
+  include_tasks: cmdline_options.yaml
   with_items: "{{ raspberry_pi_cmdline_options }}"
+
+# Execute handlers right after this
+- meta: flush_handlers
