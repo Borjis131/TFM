@@ -4,4 +4,4 @@
   with_items: "{{ raspberry_pi_cmdline_options }}"
 
 # Execute handlers right after this
-- meta: flush_handlers
+- ansible.builtin.meta: flush_handlers

@@ -14,4 +14,4 @@
   when: containerd_config_edit | bool == true
 
 # Execute handlers right after this
-- meta: flush_handlers
+- ansible.builtin.meta: flush_handlers
