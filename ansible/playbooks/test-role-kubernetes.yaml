@@ -1,6 +1,5 @@
 ---
 - hosts: nodes
   roles:
-    - raspberry-pi
     - containerd
     - kubernetes
