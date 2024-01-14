@@ -1,0 +1,30 @@
+---
+- name: Gather services
+  ansible.builtin.service_facts:
+
+- name: Disable firewalld for Calico
+  become: yes
+  ansible.builtin.service:
+    name: firewalld
+    state: stopped
+    enabled: false
+  when: "'firewalld' in services"
+
+- name: Install Calico Tigera Operator
+  ansible.builtin.command: "kubectl create -f {{ calico_tigera_operator_manifest_url }}"
+
+- name: Download Calico custom resources
+  become: yes
+  ansible.builtin.get_url:
+    url: "{{ calico_custom_resources_manifest_url }}"
+    dest: "/tmp/calico_{{ kubernetes_pod_network_add_on_version }}_custom_resources.yaml"
+
+- name: Modify Calico CIDR
+  become: yes
+  ansible.builtin.replace:
+    path: "/tmp/calico_{{ kubernetes_pod_network_add_on_version }}_custom_resources.yaml"
+    regexp: '(\t*cidr:) 192.168.0.0/16$'
+    replace: '\1 {{ kubernetes_pod_network_cidr }}'
+
+- name: Install Calico custom resources
+  ansible.builtin.command: "kubectl create -f /tmp/calico_{{ kubernetes_pod_network_add_on_version }}_custom_resources.yaml"

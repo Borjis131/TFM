@@ -1,0 +1,58 @@
+---
+- name: Load kernel module at boot
+  become: yes
+  ansible.builtin.lineinfile:
+    path: /etc/modules
+    line: "{{ item }}"
+    state: present
+  with_items: "{{ kubernetes_prerequisites_kernel_modules }}"
+  notify: Restart host
+
+# Debian specific task
+- name: Disable swap through systemd service
+  become: yes
+  ansible.builtin.service:
+    name: dphys-swapfile
+    enabled: no
+  when: ansible_distribution == "Debian"
+
+# Ubuntu specific tasks
+- name: Disable swap for current session
+  become: yes
+  ansible.builtin.command:
+    cmd: swapoff -a
+  when: ansible_distribution == "Ubuntu"
+
+- name: Disable swap permanently
+  become: yes
+  ansible.builtin.replace:
+    path: /etc/fstab
+    regexp: '^(\s*)([^#\n]+\s+)(\w+\s+)swap(\s+.*)$'
+    replace: '#\1\2\3swap\4'
+    backup: yes
+  when: ansible_distribution == "Ubuntu"
+  notify: Restart host
+
+# Execute handlers right after this
+- ansible.builtin.meta: flush_handlers
+
+- name: Enable IPv4 forwarding
+  become: yes
+  ansible.posix.sysctl:
+    name: net.ipv4.ip_forward
+    value: "1"
+    sysctl_set: yes
+
+- name: Let iptables see bridged IPv4 traffic
+  become: yes
+  ansible.posix.sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: "1"
+    sysctl_set: yes
+
+- name: Let iptables see bridged IPv6 traffic
+  become: yes
+  ansible.posix.sysctl:
+    name: net.bridge.bridge-nf-call-ip6tables
+    value: "1"
+    sysctl_set: yes

@@ -1,0 +1,44 @@
+---
+- name: Setup kubernetes control plane
+  become: yes
+  ansible.builtin.command: "kubeadm init --pod-network-cidr={{ kubernetes_pod_network_cidr }}"
+  when: kubernetes_role == "control_plane"
+
+- name: Ensure ~/.kube directory exists
+  ansible.builtin.file:
+    path: ~/.kube
+    state: directory
+  when: kubernetes_role == "control_plane"
+
+- name: Copy admin.conf to ~/.kube/config
+  become: yes
+  ansible.builtin.copy:
+    src: /etc/kubernetes/admin.conf
+    dest: "/home/{{ ansible_user }}/.kube/config"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0644"
+    remote_src: true
+  when: kubernetes_role == "control_plane"
+
+- name: Get kubeadm join command
+  ansible.builtin.command: "kubeadm token create --print-join-command"
+  when: kubernetes_role == "control_plane"
+  register: join_command_result
+
+- name: Set kubeadm join command as ansible fact in the nodes
+  ansible.builtin.set_fact:
+    kubernetes_node_join_command: "{{ join_command_result.stdout }}"
+  when: join_command_result.stdout is defined
+  delegate_to: "{{ item }}"
+  delegate_facts: true
+  with_items: "{{ groups['nodes'] }}"
+
+- name: Setup kubernetes node
+  become: yes
+  ansible.builtin.command: "{{ kubernetes_node_join_command }}"
+  when: kubernetes_role == "node"
+
+# TODO (borieher): Do something with kubernetes_schedule_pods_on_control_plane
+
+# TODO (borieher): Set roles in kubernetes

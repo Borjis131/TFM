@@ -1,0 +1,52 @@
+---
+- name: Update the apt package index
+  become: yes
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install packages to allow apt to use a repository over HTTPS
+  become: yes
+  ansible.builtin.apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - gpg
+    state: present
+
+- name: Ensure the keyrings directory exists
+  become: yes
+  ansible.builtin.file:
+    path: "{{ apt_keyrings_dir }}"
+    mode: "0755"
+    state: directory
+
+- name: Download the public signing key for the Kubernetes package repositories
+  become: yes
+  ansible.builtin.apt_key:
+    id: DE15B14486CD377B9E876E1A234654DA9A296436
+    url: "https://pkgs.k8s.io/core:/{{ apt_kubernetes_release_channel }}:/{{ apt_kubernetes_version }}/deb/Release.key"
+    keyring: "{{ apt_keyrings_dir }}/kubernetes.gpg"
+    state: present
+
+- name: Add the Kubernetes apt repository
+  become: yes
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by={{ apt_keyrings_dir }}/kubernetes.gpg] https://pkgs.k8s.io/core:/{{ apt_kubernetes_release_channel }}:/{{ apt_kubernetes_version }}/deb/ /"
+    filename: kubernetes
+    update_cache: yes
+    state: present
+
+- name: Install kubelet, kubeadm and kubectl using apt
+  become: yes
+  ansible.builtin.apt:
+    name:
+      - kubelet
+      - kubeadm
+      - kubectl
+    state: present
+
+# TODO: avoid always printing "changed"
+- name: Pin the apt version of kubelet, kubeadm and kubectl
+  become: yes
+  ansible.builtin.command: apt-mark hold kubelet kubeadm kubectl

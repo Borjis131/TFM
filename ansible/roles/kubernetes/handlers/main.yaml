@@ -1,0 +1,5 @@
+---
+- name: Restart host
+  become: yes
+  ansible.builtin.reboot:
+    reboot_timeout: 300

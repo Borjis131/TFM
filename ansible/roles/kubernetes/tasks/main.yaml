@@ -1,0 +1,20 @@
+---
+- name: Set up prerequisites for kubernetes
+  include_tasks: prerequisites_kubernetes.yaml
+
+- name: Install kubelet, kubeadm and kubectl
+  include_tasks: "{{ ansible_pkg_mgr | lower }}_install_kubernetes.yaml"
+
+- name: Ensure kubelet service is started and enabled
+  become: yes
+  ansible.builtin.service:
+    name: kubelet
+    state: started
+    enabled: true
+
+- name: Setup kubernetes
+  include_tasks: setup_kubernetes.yaml
+
+- name: Setup Calico as Pod network add-on
+  include_tasks: setup_calico.yaml
+  when: kubernetes_role == "control_plane" and kubernetes_pod_network_add_on == "calico"
