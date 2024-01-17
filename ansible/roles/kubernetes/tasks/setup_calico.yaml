@@ -12,6 +12,11 @@
 
 - name: Install Calico Tigera Operator
   ansible.builtin.command: "kubectl create -f {{ calico_tigera_operator_manifest_url }}"
+  register: tigera_operator_result
+  changed_when: "'created' in tigera_operator_result.stdout or 'already exists' in tigera_operator_result.stdout"
+  until: tigera_operator_result is not failed
+  retries: 10
+  delay: 5
 
 - name: Download Calico custom resources
   become: yes
@@ -28,3 +33,8 @@
 
 - name: Install Calico custom resources
   ansible.builtin.command: "kubectl create -f /tmp/calico_{{ kubernetes_pod_network_add_on_version }}_custom_resources.yaml"
+  register: custom_resources_result
+  changed_when: "'created' in custom_resources_result.stdout or 'already exists' in custom_resources_result.stdout"
+  until: custom_resources_result is not failed
+  retries: 10
+  delay: 5

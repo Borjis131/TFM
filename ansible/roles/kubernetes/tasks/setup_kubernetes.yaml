@@ -28,7 +28,7 @@
 
 - name: Set kubeadm join command as ansible fact in the nodes
   ansible.builtin.set_fact:
-    kubernetes_node_join_command: "{{ join_command_result.stdout }}"
+    kubernetes_join_command: "{{ join_command_result.stdout }}"
   when: join_command_result.stdout is defined
   delegate_to: "{{ item }}"
   delegate_facts: true
@@ -36,9 +36,5 @@
 
 - name: Setup kubernetes node
   become: yes
-  ansible.builtin.command: "{{ kubernetes_node_join_command }}"
+  ansible.builtin.command: "{{ kubernetes_join_command }}"
   when: kubernetes_role == "node"
-
-# TODO (borieher): Do something with kubernetes_schedule_pods_on_control_plane
-
-# TODO (borieher): Set roles in kubernetes
