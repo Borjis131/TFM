@@ -3,29 +3,30 @@
 control_plane:
   hosts:
     master:
-      ansible_host: k8s-master.local
-      ansible_user: pi
+      ansible_host: k8s-master
+      ansible_user: borjis
       ansible_ssh_private_key_file: ~/.ssh/borjis-rsa
+      kubernetes_role: control_plane
 
 nodes:
   hosts:
     node1:
-      ansible_host: k8s-node-1.local
-      ansible_user: pi
+      ansible_host: k8s-node-1
+      ansible_user: borjis
       ansible_ssh_private_key_file: ~/.ssh/borjis-rsa
       kubernetes_role: node
 
     node2:
-      ansible_host: k8s-node-2.local
-      ansible_user: pi
+      ansible_host: k8s-node-2
+      ansible_user: borjis
       ansible_ssh_private_key_file: ~/.ssh/borjis-rsa
       kubernetes_role: node
 
-    node3:
-      ansible_host: k8s-node-3.local
-      ansible_user: pi
-      ansible_ssh_private_key_file: ~/.ssh/borjis-rsa
-      kubernetes_role: control_plane
+    # node3:
+    #   ansible_host: k8s-node-3
+    #   ansible_user: borjis
+    #   ansible_ssh_private_key_file: ~/.ssh/borjis-rsa
+    #   kubernetes_role: node
 
 k8s_cluster:
   children:
