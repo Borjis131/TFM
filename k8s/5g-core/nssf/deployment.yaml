@@ -22,10 +22,10 @@ spec:
         - name: sbi
           containerPort: 80
         volumeMounts:
-        - name: nssf-config-volume
+        - name: nssf-volume-config
           mountPath: /open5gs/config/nssf.yaml
           subPath: nssf.yaml
       volumes:
-      - name: nssf-config-volume
+      - name: nssf-volume-config
         configMap:
           name: nssf-configmap

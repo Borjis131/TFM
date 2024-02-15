@@ -25,10 +25,10 @@ spec:
           containerPort: 8805
           protocol: UDP
         volumeMounts:
-        - name: smf-config-volume
+        - name: smf-volume-config
           mountPath: /open5gs/config/smf.yaml
           subPath: smf.yaml
       volumes:
-      - name: smf-config-volume
+      - name: smf-volume-config
         configMap:
           name: smf-configmap

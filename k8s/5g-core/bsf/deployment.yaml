@@ -22,10 +22,10 @@ spec:
         - name: sbi
           containerPort: 80
         volumeMounts:
-        - name: bsf-config-volume
+        - name: bsf-volume-config
           mountPath: /open5gs/config/bsf.yaml
           subPath: bsf.yaml
       volumes:
-      - name: bsf-config-volume
+      - name: bsf-volume-config
         configMap:
           name: bsf-configmap

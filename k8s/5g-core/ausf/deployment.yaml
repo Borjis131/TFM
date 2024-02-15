@@ -22,10 +22,10 @@ spec:
         - name: sbi
           containerPort: 80
         volumeMounts:
-        - name: ausf-config-volume
+        - name: ausf-volume-config
           mountPath: /open5gs/config/ausf.yaml
           subPath: ausf.yaml
       volumes:
-      - name: ausf-config-volume
+      - name: ausf-volume-config
         configMap:
           name: ausf-configmap

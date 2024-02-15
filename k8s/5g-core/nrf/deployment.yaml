@@ -22,10 +22,10 @@ spec:
         - name: sbi
           containerPort: 80
         volumeMounts:
-        - name: nrf-config-volume
+        - name: nrf-volume-config
           mountPath: /open5gs/config/nrf.yaml
           subPath: nrf.yaml
       volumes:
-      - name: nrf-config-volume
+      - name: nrf-volume-config
         configMap:
           name: nrf-configmap

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-configmap
+data:
+  mongod.conf: |
+    systemLog:
+      destination: file
+      logAppend: true
+      path: /var/log/mongodb/mongod.log
+
+    storage:
+      dbPath: /data/db
+
+    processManagement:
+      timeZoneInfo: /usr/share/zoneinfo
+
+    net:
+      port: 27017
+      bindIp: 0.0.0.0

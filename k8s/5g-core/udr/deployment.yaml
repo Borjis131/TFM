@@ -22,10 +22,10 @@ spec:
         - name: sbi
           containerPort: 80
         volumeMounts:
-        - name: udr-config-volume
+        - name: udr-volume-config
           mountPath: /open5gs/config/udr.yaml
           subPath: udr.yaml
       volumes:
-      - name: udr-config-volume
+      - name: udr-volume-config
         configMap:
           name: udr-configmap

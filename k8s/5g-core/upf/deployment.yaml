@@ -30,10 +30,10 @@ spec:
           capabilities:
             add: ["NET_ADMIN"]
         volumeMounts:
-        - name: upf-config-volume
+        - name: upf-volume-config
           mountPath: /open5gs/config/upf.yaml
           subPath: upf.yaml
       volumes:
-      - name: upf-config-volume
+      - name: upf-volume-config
         configMap:
           name: upf-configmap

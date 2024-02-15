@@ -25,10 +25,10 @@ spec:
           containerPort: 38412
           protocol: SCTP
         volumeMounts:
-        - name: amf-config-volume
+        - name: amf-volume-config
           mountPath: /open5gs/config/amf.yaml
           subPath: amf.yaml
       volumes:
-      - name: amf-config-volume
+      - name: amf-volume-config
         configMap:
           name: amf-configmap

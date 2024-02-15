@@ -22,10 +22,10 @@ spec:
         - name: sbi
           containerPort: 80
         volumeMounts:
-        - name: pcf-config-volume
+        - name: pcf-volume-config
           mountPath: /open5gs/config/pcf.yaml
           subPath: pcf.yaml
       volumes:
-      - name: pcf-config-volume
+      - name: pcf-volume-config
         configMap:
           name: pcf-configmap
