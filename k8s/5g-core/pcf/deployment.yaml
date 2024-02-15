@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pcf-deployment
+  labels:
+    nf: pcf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      nf: pcf
+  template:
+    metadata:
+      labels:
+        nf: pcf
+    spec:
+      containers:
+      - name: pcf
+        image: borieher/pcf:v2.7.0
+        args: ["-c", "/open5gs/config/pcf.yaml"]
+        ports:
+        - name: sbi
+          containerPort: 80
+        volumeMounts:
+        - name: pcf-config-volume
+          mountPath: /open5gs/config/pcf.yaml
+          subPath: pcf.yaml
+      volumes:
+      - name: pcf-config-volume
+        configMap:
+          name: pcf-configmap

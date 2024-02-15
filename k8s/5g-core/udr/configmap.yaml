@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: udr-configmap
+data:
+  udr.yaml: |
+    db_uri: mongodb://db-service.default.svc.cluster.local/open5gs
+
+    logger:
+      file: /open5gs/install/var/log/open5gs/udr.log
+
+    global:
+      max:
+        ue: 1024
+
+    udr:
+      sbi:
+        server:
+          - dev: eth0
+            port: 80
+        client:
+          nrf:
+            - uri: http://nrf-service-sbi.default.svc.cluster.local:80

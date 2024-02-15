@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: udm-deployment
+  labels:
+    nf: udm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      nf: udm
+  template:
+    metadata:
+      labels:
+        nf: udm
+    spec:
+      containers:
+      - name: udm
+        image: borieher/udm:v2.7.0
+        args: ["-c", "/open5gs/config/udm.yaml"]
+        ports:
+        - name: sbi
+          containerPort: 80
+        volumeMounts:
+        - name: udm-config-volume
+          mountPath: /open5gs/config/udm.yaml
+          subPath: udm.yaml
+      volumes:
+      - name: udm-config-volume
+        configMap:
+          name: udm-configmap

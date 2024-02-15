@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: upf-service-pfcp
+spec:
+  selector:
+    nf: upf
+  ports:
+    - name: pfcp
+      port: 8805
+      targetPort: 8805
+      protocol: UDP
+  type: ClusterIP

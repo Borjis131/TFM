@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nrf-deployment
+  labels:
+    nf: nrf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      nf: nrf
+  template:
+    metadata:
+      labels:
+        nf: nrf
+    spec:
+      containers:
+      - name: nrf
+        image: borieher/nrf:v2.7.0
+        args: ["-c", "/open5gs/config/nrf.yaml"]
+        ports:
+        - name: sbi
+          containerPort: 80
+        volumeMounts:
+        - name: nrf-config-volume
+          mountPath: /open5gs/config/nrf.yaml
+          subPath: nrf.yaml
+      volumes:
+      - name: nrf-config-volume
+        configMap:
+          name: nrf-configmap

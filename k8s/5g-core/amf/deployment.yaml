@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: amf-deployment
+  labels:
+    nf: amf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      nf: amf
+  template:
+    metadata:
+      labels:
+        nf: amf
+    spec:
+      containers:
+      - name: amf
+        image: borieher/amf:v2.7.0
+        args: ["-c", "/open5gs/config/amf.yaml"]
+        ports:
+        - name: sbi
+          containerPort: 80
+        - name: ngap
+          containerPort: 38412
+          protocol: SCTP
+        volumeMounts:
+        - name: amf-config-volume
+          mountPath: /open5gs/config/amf.yaml
+          subPath: amf.yaml
+      volumes:
+      - name: amf-config-volume
+        configMap:
+          name: amf-configmap

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bsf-service-sbi
+spec:
+  selector:
+    nf: bsf
+  ports:
+    - name: sbi
+      port: 80
+      targetPort: 80
+  type: ClusterIP

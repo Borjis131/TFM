@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ausf-deployment
+  labels:
+    nf: ausf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      nf: ausf
+  template:
+    metadata:
+      labels:
+        nf: ausf
+    spec:
+      containers:
+      - name: ausf
+        image: borieher/ausf:v2.7.0
+        args: ["-c", "/open5gs/config/ausf.yaml"]
+        ports:
+        - name: sbi
+          containerPort: 80
+        volumeMounts:
+        - name: ausf-config-volume
+          mountPath: /open5gs/config/ausf.yaml
+          subPath: ausf.yaml
+      volumes:
+      - name: ausf-config-volume
+        configMap:
+          name: ausf-configmap

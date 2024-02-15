@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nssf-deployment
+  labels:
+    nf: nssf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      nf: nssf
+  template:
+    metadata:
+      labels:
+        nf: nssf
+    spec:
+      containers:
+      - name: nssf
+        image: borieher/nssf:v2.7.0
+        args: ["-c", "/open5gs/config/nssf.yaml"]
+        ports:
+        - name: sbi
+          containerPort: 80
+        volumeMounts:
+        - name: nssf-config-volume
+          mountPath: /open5gs/config/nssf.yaml
+          subPath: nssf.yaml
+      volumes:
+      - name: nssf-config-volume
+        configMap:
+          name: nssf-configmap

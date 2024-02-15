@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: upf-deployment
+  labels:
+    nf: upf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      nf: upf
+  template:
+    metadata:
+      labels:
+        nf: upf
+    spec:
+      containers:
+      - name: upf
+        image: borieher/upf:v2.7.0
+        args: ["-c", "/open5gs/config/upf.yaml"]
+        ports:
+        - name: gtpu
+          containerPort: 2152
+          protocol: UDP
+        - name: pfcp
+          containerPort: 8805
+          protocol: UDP
+        securityContext:
+          privileged: true
+          capabilities:
+            add: ["NET_ADMIN"]
+        volumeMounts:
+        - name: upf-config-volume
+          mountPath: /open5gs/config/upf.yaml
+          subPath: upf.yaml
+      volumes:
+      - name: upf-config-volume
+        configMap:
+          name: upf-configmap

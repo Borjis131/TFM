@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: smf-configmap
+data:
+  smf.yaml: |
+    logger:
+      file: /open5gs/install/var/log/open5gs/smf.log
+
+    global:
+      max:
+        ue: 1024
+
+    smf:
+      sbi:
+        server:
+          - dev: eth0
+            port: 80
+        client:
+          nrf:
+            - uri: http://nrf-service-sbi.default.svc.cluster.local:80
+      pfcp:
+        server:
+          - dev: eth0
+        client:
+          upf:
+            - address: upf-service-pfcp.default.svc.cluster.local
+      gtpc:
+        server:
+          - dev: eth0
+      gtpu:
+        server:
+          - dev: eth0
+      session:
+        - subnet: 10.45.0.1/16
+      dns:
+        - 8.8.8.8
+        - 8.8.4.4
+      mtu: 1400
