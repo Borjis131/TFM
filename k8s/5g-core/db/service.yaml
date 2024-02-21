@@ -9,4 +9,5 @@ spec:
     - name: db
       port: 27017
       targetPort: 27017
-  type: ClusterIP
+      nodePort: 30007
+  type: NodePort
