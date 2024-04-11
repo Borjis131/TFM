@@ -1,0 +1,11 @@
+---
+# metallb specific variables
+metallb_version: v0.14.4
+metallb_manifest_url: "https://raw.githubusercontent.com/metallb/metallb/{{ metallb_version }}/config/manifests/metallb-native.yaml"
+
+# metallb configuration variables
+metallb_advertisement_config_file_path: /tmp/advertisement_config.yaml
+metallb_ipaddresspool_config_file_path: /tmp/ipaddresspool_config.yaml
+metallb_advertisement_mode: l2
+metallb_advertisement_name: example
+metallb_ipaddress_pool: 10.33.0.2-10.33.0.8

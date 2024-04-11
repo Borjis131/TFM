@@ -1,0 +1,46 @@
+---
+# TODO (borieher): Install MetalLB
+
+# NOTE (borieher): since Kubernetes v1.14.2 you have to enable strict ARP mode
+#- name: Enable strict ARP mode
+# actually apply the changes, returns nonzero returncode on errors only
+#kubectl get configmap kube-proxy -n kube-system -o yaml | \
+#sed -e "s/strictARP: false/strictARP: true/" | \
+#kubectl apply -f - -n kube-system
+
+- name: Install MetalLB
+  ansible.builtin.command: "kubectl apply -f {{ metallb_manifest_url }}"
+  register: metallb_result
+  changed_when: "'created' in metallb_result.stdout or 'already exists' in metallb_result.stdout"
+  until: metallb_result is not failed
+  retries: 10
+  delay: 5
+
+- name: Apply MetalLB configuration values to layer 2 advertisement mode template
+  ansible.builtin.template:
+    src: l2advertisement.j2
+    dest: "{{ metallb_advertisement_config_file_path }}"
+  when: metallb_advertisement_mode == "l2"
+
+# TODO (borieher): Implement BGP advertisement mode template
+
+- name: Apply MetalLB configuration values to IP address pool template
+  ansible.builtin.template:
+    src: ipaddresspool.j2
+    dest: "{{ metallb_ipaddresspool_config_file_path }}"
+
+- name: Configure MetalLB advertisement mode
+  ansible.builtin.command: "kubectl apply -f {{ metallb_advertisement_config_file_path }}"
+  register: metallb_advertisement_result
+  changed_when: "'created' in metallb_advertisement_result.stdout or 'already exists' in metallb_advertisement_result.stdout"
+  until: metallb_advertisement_result is not failed
+  retries: 10
+  delay: 5
+
+- name: Configure MetalLB IP address pool
+  ansible.builtin.command: "kubectl apply -f {{ metallb_ipaddresspool_config_file_path }}"
+  register: metallb_ipaddresspool_result
+  changed_when: "'created' in metallb_ipaddresspool_result.stdout or 'already exists' in metallb_ipaddresspool_result.stdout"
+  until: metallb_ipaddresspool_result is not failed
+  retries: 10
+  delay: 5

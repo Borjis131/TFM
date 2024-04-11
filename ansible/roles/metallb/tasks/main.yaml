@@ -1,0 +1,6 @@
+---
+- name: Setup MetalLB as LoadBalancer
+  include_tasks: setup_metallb.yaml
+  when: kubernetes_role == "control_plane"
+
+# TODO (borieher): What happens when more than one node is type control_plane?
