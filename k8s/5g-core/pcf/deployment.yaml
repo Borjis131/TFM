@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: pcf
-        image: borieher/pcf:v2.7.0
+        image: borieher/pcf:v2.7.1
         args: ["-c", "/open5gs/config/pcf.yaml"]
         ports:
         - name: sbi

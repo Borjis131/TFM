@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: ausf
-        image: borieher/ausf:v2.7.0
+        image: borieher/ausf:v2.7.1
         args: ["-c", "/open5gs/config/ausf.yaml"]
         ports:
         - name: sbi

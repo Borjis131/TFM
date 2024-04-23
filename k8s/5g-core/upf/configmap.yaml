@@ -5,11 +5,10 @@ metadata:
 data:
   upf.yaml: |
     logger:
-      file: /open5gs/install/var/log/open5gs/upf.log
+      file:
+        path: /open5gs/install/var/log/open5gs/upf.log
 
     global:
-      max:
-        ue: 1024
 
     upf:
       pfcp:
@@ -21,4 +20,5 @@ data:
           - dev: eth0
             advertise: upf-service-gtpu.default.svc.cluster.local
       session:
-        - subnet: 10.45.0.1/16
+        - subnet: 10.45.0.0/16
+          gateway: 10.45.0.1

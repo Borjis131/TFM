@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: amf
-        image: borieher/amf:v2.7.0
+        image: borieher/amf:v2.7.1
         args: ["-c", "/open5gs/config/amf.yaml"]
         ports:
         - name: sbi

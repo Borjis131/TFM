@@ -5,11 +5,10 @@ metadata:
 data:
   amf.yaml: |
     logger:
-      file: /open5gs/install/var/log/open5gs/amf.log
+      file:
+        path: /open5gs/install/var/log/open5gs/amf.log
 
     global:
-      max:
-        ue: 1024
 
     amf:
       sbi:

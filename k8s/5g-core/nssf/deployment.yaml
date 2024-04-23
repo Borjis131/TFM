@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: nssf
-        image: borieher/nssf:v2.7.0
+        image: borieher/nssf:v2.7.1
         args: ["-c", "/open5gs/config/nssf.yaml"]
         ports:
         - name: sbi

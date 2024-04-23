@@ -5,11 +5,10 @@ metadata:
 data:
   bsf.yaml: |
     logger:
-      file: /open5gs/install/var/log/open5gs/bsf.log
+      file:
+        path: /open5gs/install/var/log/open5gs/bsf.log
 
     global:
-      max:
-        ue: 1024
 
     bsf:
       sbi:

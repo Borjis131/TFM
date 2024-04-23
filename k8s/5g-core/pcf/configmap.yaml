@@ -7,11 +7,10 @@ data:
     db_uri: mongodb://db-service.default.svc.cluster.local/open5gs
 
     logger:
-      file: /open5gs/install/var/log/open5gs/pcf.log
+      file:
+        path: /open5gs/install/var/log/open5gs/pcf.log
 
     global:
-      max:
-        ue: 1024
 
     pcf:
       sbi:

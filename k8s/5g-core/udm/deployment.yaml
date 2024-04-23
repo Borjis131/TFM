@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: udm
-        image: borieher/udm:v2.7.0
+        image: borieher/udm:v2.7.1
         args: ["-c", "/open5gs/config/udm.yaml"]
         ports:
         - name: sbi

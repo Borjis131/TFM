@@ -5,11 +5,10 @@ metadata:
 data:
   nrf.yaml: |
     logger:
-      file: /open5gs/install/var/log/open5gs/nrf.log
+      file:
+        path: /open5gs/install/var/log/open5gs/nrf.log
 
     global:
-      max:
-        ue: 1024
 
     nrf:
       sbi:

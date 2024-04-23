@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: nrf
-        image: borieher/nrf:v2.7.0
+        image: borieher/nrf:v2.7.1
         args: ["-c", "/open5gs/config/nrf.yaml"]
         ports:
         - name: sbi
