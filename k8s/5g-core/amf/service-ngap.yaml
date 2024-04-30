@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: amf-service-ngap
+  annotations:
+    metallb.universe.tf/loadBalancerIPs: 10.33.0.2
 spec:
   selector:
     nf: amf

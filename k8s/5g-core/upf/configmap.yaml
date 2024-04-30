@@ -18,7 +18,7 @@ data:
       gtpu:
         server:
           - dev: eth0
-            advertise: upf-service-gtpu.default.svc.cluster.local
+            advertise: 10.33.0.3
       session:
         - subnet: 10.45.0.0/16
           gateway: 10.45.0.1

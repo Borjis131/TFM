@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: upf-service-gtpu
+  annotations:
+    metallb.universe.tf/loadBalancerIPs: 10.33.0.3
 spec:
   selector:
     nf: upf
