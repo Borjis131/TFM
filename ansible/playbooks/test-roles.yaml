@@ -4,3 +4,4 @@
     - raspberry-pi
     - containerd
     - kubernetes
+    - metallb
