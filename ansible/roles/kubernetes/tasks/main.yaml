@@ -12,19 +12,31 @@
     state: started
     enabled: true
 
+- name: Check if kubernetes is already present
+  ansible.builtin.stat:
+    path: /etc/kubernetes/admin.conf
+  register: kubernetes_init
+
 - name: Setup kubernetes
   include_tasks: setup_kubernetes.yaml
+  when: not kubernetes_init.stat.exists
+
+- name: Check if Pod network add-on is already present
+  ansible.builtin.command: "kubectl get namespace {{ calico_namespace }} --ignore-not-found -o yaml"
+  register: calico_init
+  when: kubernetes_role == "control_plane" and kubernetes_pod_network_add_on == "calico"
+  changed_when: false
 
 - name: Setup Calico as Pod network add-on
   include_tasks: setup_calico.yaml
-  when: kubernetes_role == "control_plane" and kubernetes_pod_network_add_on == "calico"
+  when: "kubernetes_role == 'control_plane' and kubernetes_pod_network_add_on == 'calico' and not 'phase: Active' in calico_init.stdout"
 
 # TODO (borieher): Find a fancier way to handle the error output
-- name: Schedule Pods on control plane
-  ansible.builtin.command: "kubectl taint nodes --all node-role.kubernetes.io/control-plane-"
-  when: kubernetes_role == "control_plane" and (kubernetes_schedule_pods_on_control_plane | bool == true)
-  failed_when: false
-  ignore_errors: yes
+#- name: Schedule Pods on control plane
+  #ansible.builtin.command: "kubectl taint nodes --all node-role.kubernetes.io/control-plane-"
+  #when: kubernetes_role == "control_plane" and (kubernetes_schedule_pods_on_control_plane | bool == true)
+  #failed_when: false
+  #ignore_errors: yes
 
 - name: Set roles on nodes
   ansible.builtin.command: "kubectl label node {{ hostvars[item].ansible_host }} node-role.kubernetes.io/node="

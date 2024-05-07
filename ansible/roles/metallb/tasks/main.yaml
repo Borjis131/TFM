@@ -1,6 +1,12 @@
 ---
+- name: Check if MetalLB is already present
+  ansible.builtin.command: "kubectl get namespace {{ metallb_namespace }} --ignore-not-found -o yaml"
+  register: metallb_init
+  when: kubernetes_role == "control_plane"
+  changed_when: false
+
 - name: Setup MetalLB as LoadBalancer
   include_tasks: setup_metallb.yaml
-  when: kubernetes_role == "control_plane"
+  when: "kubernetes_role == 'control_plane' and not 'phase: Active' in metallb_init.stdout"
 
 # TODO (borieher): What happens when more than one node is type control_plane?

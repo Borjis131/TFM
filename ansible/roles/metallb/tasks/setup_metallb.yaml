@@ -1,12 +1,24 @@
 ---
-# TODO (borieher): Install MetalLB
+- name: Get kubeproxy's configuration
+  ansible.builtin.command: "kubectl get configmap kube-proxy -n kube-system -o yaml"
+  register: kubeproxy_config
 
-# NOTE (borieher): since Kubernetes v1.14.2 you have to enable strict ARP mode
-#- name: Enable strict ARP mode
-# actually apply the changes, returns nonzero returncode on errors only
-#kubectl get configmap kube-proxy -n kube-system -o yaml | \
-#sed -e "s/strictARP: false/strictARP: true/" | \
-#kubectl apply -f - -n kube-system
+- name: Copy kubeproxy's configuration to /tmp/kubeproxy_config.yaml
+  become: yes
+  ansible.builtin.copy:
+    dest: /tmp/kubeproxy_config.yaml
+    content: "{{ kubeproxy_config.stdout }}"
+
+# TODO (borieher): Execute when kubernetes_version > v1.14 and kubeproxy_mode == ipvs
+- name: Enable strict ARP mode
+  become: yes
+  ansible.builtin.replace:
+    path: /tmp/kubeproxy_config.yaml
+    regexp: 'strictARP: false'
+    replace: 'strictARP: true'
+
+- name: Apply kubeproxy's modified configuration
+  ansible.builtin.command: "kubectl apply -f /tmp/kubeproxy_config.yaml -n kube-system"
 
 - name: Install MetalLB
   ansible.builtin.command: "kubectl apply -f {{ metallb_manifest_url }}"
@@ -34,13 +46,13 @@
   register: metallb_advertisement_result
   changed_when: "'created' in metallb_advertisement_result.stdout or 'already exists' in metallb_advertisement_result.stdout"
   until: metallb_advertisement_result is not failed
-  retries: 10
-  delay: 5
+  retries: 15
+  delay: 20
 
 - name: Configure MetalLB IP address pool
   ansible.builtin.command: "kubectl apply -f {{ metallb_ipaddresspool_config_file_path }}"
   register: metallb_ipaddresspool_result
   changed_when: "'created' in metallb_ipaddresspool_result.stdout or 'already exists' in metallb_ipaddresspool_result.stdout"
   until: metallb_ipaddresspool_result is not failed
-  retries: 10
-  delay: 5
+  retries: 15
+  delay: 20
