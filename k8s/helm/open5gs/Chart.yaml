@@ -14,6 +14,11 @@ dependencies:
   version: 0.1.0
   condition: db.enabled
 
+- name: webui
+  repository: file://../webui
+  version: 0.1.0
+  condition: webui.enabled
+
 - name: nrf
   repository: file://../nrf
   version: 0.1.0

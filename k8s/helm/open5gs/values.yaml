@@ -18,6 +18,16 @@
   #global:
     #containerPorts:
 
+#webui:
+  #enabled: true/false
+  #image:
+  #services:
+    #webui:
+      #type: NodePort/ClusterIP
+      #nodePort:
+  #global:
+    #containerPorts:
+
 #nssf:
   #enabled: true/false
   #image:
@@ -69,6 +79,7 @@ global:
   containerPorts:
     db: 27017
     sbi: 80
+    webui: 9999
   mobileNetwork:
     name: Open5GS
     plmn:
@@ -89,6 +100,13 @@ db:
     db:
       type: NodePort
       nodePort: 30007
+
+webui:
+  enabled: true
+  services:
+    webui:
+      type: NodePort
+      nodePort: 30999
 
 nrf:
   enabled: true
