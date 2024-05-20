@@ -19,6 +19,7 @@ spec:
       containers:
       - name: {{ include "common.names.fullname" . }}
         image: {{ template "webui.image" . }}
+        args: ["run", "dev"]
         env:
         - name: DB_URI
           {{- if eq .Release.Name "db" }}
@@ -31,7 +32,7 @@ spec:
         - name: PORT
           value: {{ .Values.global.containerPorts.webui | quote }}
         - name: NODE_ENV
-          value: "production"
+          value: "dev"
         ports:
         - name: webui
           containerPort: {{ .Values.global.containerPorts.webui }}

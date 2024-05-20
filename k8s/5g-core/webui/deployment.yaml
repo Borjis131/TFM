@@ -17,15 +17,16 @@ spec:
       containers:
       - name: webui
         image: borieher/webui:v2.7.1
+        args: ["run", "dev"]
         env:
           - name: DB_URI
             value: "mongodb://db-service.default.svc.cluster.local/open5gs"
           - name: HOSTNAME
             value: "0.0.0.0"
           - name: PORT
-            value: 9999
+            value: "9999"
           - name: NODE_ENV
-            value: "production"
+            value: "env"
         ports:
         - name: webui
           containerPort: 9999
