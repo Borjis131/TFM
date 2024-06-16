@@ -69,6 +69,7 @@ global:
   containerPorts:
     db: 27017
     sbi: 80
+    webui: 9999
   mobileNetwork:
     name: Open5GS
     plmn:
@@ -76,8 +77,8 @@ global:
       mnc: "01"
       tac: 1
       s_nssai:
-        sst: 1
-        sd: "000001"
+        - sst: 1
+          sd: "000001"
     dataNetwork:
       subnet: 10.45.0.0/16
       gateway: 10.45.0.1
@@ -89,6 +90,13 @@ db:
     db:
       type: NodePort
       nodePort: 30007
+
+webui:
+  enabled: true
+  services:
+    webui:
+      type: NodePort
+      nodePort: 30999
 
 nrf:
   enabled: true

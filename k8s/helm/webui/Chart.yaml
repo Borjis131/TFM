@@ -1,7 +1,7 @@
 apiVersion: v2
 
-name: pcf
-description: Open5GS PCF Helm chart for Kubernetes
+name: webui
+description: Open5GS WebUI Helm chart for Kubernetes
 version: 0.2.0
 type: application
 appVersion: "v2.7.1"
