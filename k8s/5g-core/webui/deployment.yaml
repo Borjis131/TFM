@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webui-deployment
+  labels:
+    app: webui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webui
+  template:
+    metadata:
+      labels:
+        app: webui
+    spec:
+      containers:
+      - name: webui
+        image: borieher/webui:v2.7.1
+        args: ["run", "dev"]
+        env:
+          - name: DB_URI
+            value: "mongodb://db-service.default.svc.cluster.local/open5gs"
+          - name: HOSTNAME
+            value: "0.0.0.0"
+          - name: PORT
+            value: "9999"
+          - name: NODE_ENV
+            value: "dev"
+        ports:
+        - name: webui
+          containerPort: 9999

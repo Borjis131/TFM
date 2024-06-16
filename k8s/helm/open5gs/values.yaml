@@ -18,6 +18,16 @@
   #global:
     #containerPorts:
 
+#webui:
+  #enabled: true/false
+  #image:
+  #services:
+    #webui:
+      #type: NodePort/ClusterIP
+      #nodePort:
+  #global:
+    #containerPorts:
+
 #nssf:
   #enabled: true/false
   #image:
