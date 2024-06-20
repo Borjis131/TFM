@@ -1,6 +1,6 @@
 logger:
   file:
-    path: /open5gs/install/var/log/open5gs/nssf.log
+    path: /var/log/open5gs/nssf.log
 
 global:
 
@@ -24,6 +24,6 @@ nssf:
         - uri: http://{{ $.Release.Name }}-nrf-service-sbi:{{ $.Values.global.containerPorts.sbi }}
         {{- end }}
           s_nssai:
-            - sst: {{ .sst }}
-              sd: {{ .sd }}
+            sst: {{ .sst }}
+            sd: {{ .sd }}
         {{- end }}
