@@ -1,0 +1,48 @@
+services:
+  gnb:
+    container_name: gnb
+    image: "borieher/gnb:master"
+    command: "-c /UERANSIM/config/gnb.yaml"
+    networks:
+      open5gs:
+        aliases:
+          - gnb.ueransim.org
+    configs:
+      - source: gnb_config
+        target: /UERANSIM/config/gnb.yaml
+    ports:
+      - "0.0.0.0:38412:38412/sctp"
+      - "0.0.0.0:2152:2152/udp"
+
+  ue:
+    container_name: ue
+    image: "borieher/ue:master"
+    command: "-c /UERANSIM/config/ue.yaml"
+    networks:
+      open5gs:
+        aliases:
+          - ue.ueransim.org
+    configs:
+      - source: ue_config
+        target: /UERANSIM/config/ue.yaml
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    depends_on:
+      - gnb
+
+networks:
+  open5gs:
+    name: open5gs
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: br-ogs
+    ipam:
+      config:
+        - subnet: 10.33.33.0/24
+
+configs:
+  gnb_config:
+    file: ../../configs/gnb.yaml
+  ue_config:
+    file: ../../configs/ue.yaml
