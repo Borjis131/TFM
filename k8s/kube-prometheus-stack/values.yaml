@@ -22,12 +22,10 @@ grafana:
   defaultDashboardsEnabled: true
   defaultDashboardsTimezone: utc
   ingress:
-    enabled: false
-    #enabled: true
-    #ingressClassName: nginx
-    #hosts:
-      #- grafana.monitoring.org
-    #path: /grafana
+    enabled: true
+    ingressClassName: nginx
+    hosts: []
+    path: /
   serviceMonitor:
     enabled: true
   admin:
