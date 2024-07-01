@@ -1,0 +1,72 @@
+{
+    "version": "2.0.0",
+    "presentation": {
+        "echo": false,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": true
+    },
+    "tasks": [
+        {
+            "label": "Create terminals",
+            "dependsOn": [
+                "master",
+                "node1",
+                "node2",
+                "pi3"
+            ],
+            // Mark as the default build task so cmd/ctrl+shift+b will create them
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            // Try start the task on folder open
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        },
+        {
+            // The name that shows up in terminal tab
+            "label": "master",
+            "type": "shell",
+            "command": "ssh k8s-master",
+            // Mark as a background task to avoid the spinner animation on the terminal tab
+            "isBackground": true,
+            "problemMatcher": [],
+            "presentation": {
+                "panel": "new"
+            }
+        },
+        {
+            "label": "node1",
+            "type": "shell",
+            "command": "ssh k8s-node-1",
+            "isBackground": true,
+            "problemMatcher": [],
+            "presentation": {
+                "panel": "new"
+            }
+        },
+        {
+            "label": "node2",
+            "type": "shell",
+            "command": "ssh k8s-node-2",
+            "isBackground": true,
+            "problemMatcher": [],
+            "presentation": {
+                "panel": "new"
+            }
+        },
+        {
+            "label": "pi3",
+            "type": "shell",
+            "command": "ssh pi3",
+            "isBackground": true,
+            "problemMatcher": [],
+            "presentation": {
+                "panel": "new"
+            }
+        }
+    ]
+}
