@@ -46,7 +46,7 @@
       - kubectl
     state: present
 
-# TODO: avoid always printing "changed"
 - name: Pin the apt version of kubelet, kubeadm and kubectl
   become: yes
   ansible.builtin.command: apt-mark hold kubelet kubeadm kubectl
+  changed_when: false

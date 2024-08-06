@@ -37,4 +37,4 @@
 - name: Setup kubernetes node
   become: yes
   ansible.builtin.command: "{{ kubernetes_join_command }}"
-  when: kubernetes_role == "node" and join_command_result.stdout is defined
+  when: kubernetes_role == "node"

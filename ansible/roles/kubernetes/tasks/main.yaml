@@ -31,12 +31,10 @@
   include_tasks: setup_calico.yaml
   when: "kubernetes_role == 'control_plane' and kubernetes_pod_network_add_on == 'calico' and not 'phase: Active' in calico_init.stdout"
 
-# TODO (borieher): Find a fancier way to handle the error output
-#- name: Schedule Pods on control plane
-  #ansible.builtin.command: "kubectl taint nodes --all node-role.kubernetes.io/control-plane-"
-  #when: kubernetes_role == "control_plane" and (kubernetes_schedule_pods_on_control_plane | bool == true)
-  #failed_when: false
-  #ignore_errors: yes
+- name: Schedule Pods on control plane
+  ansible.builtin.command: "kubectl taint nodes {{ hostvars['master'].ansible_host }} node-role.kubernetes.io/control-plane-"
+  when: kubernetes_role == "control_plane" and (kubernetes_schedule_pods_on_control_plane | bool)
+  ignore_errors: true
 
 - name: Set roles on nodes
   ansible.builtin.command: "kubectl label node {{ hostvars[item].ansible_host }} node-role.kubernetes.io/node="
