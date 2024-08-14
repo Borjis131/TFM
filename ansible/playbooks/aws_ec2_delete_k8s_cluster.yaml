@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  gather_facts: False
+  vars_files:
+    - ../vars/aws.yaml
+  module_defaults:
+    group/aws:
+      aws_access_key: "{{ aws_access_key }}"
+      aws_secret_key: "{{ aws_secret_key }}"
+      region: "eu-north-1"
+
+  tasks:
+    - name: "Delete the EC2 instances for the k8s cluster"
+      amazon.aws.ec2_instance:
+        name: "{{ item}}"
+        state: terminated
+      register: result
+      with_items:
+        - aws-k8s-master
+        - aws-k8s-node-1
+        - aws-k8s-node-2
