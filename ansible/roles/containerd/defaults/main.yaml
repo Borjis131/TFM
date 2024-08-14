@@ -8,7 +8,7 @@ service_containerd_enabled: true
 ## apt
 apt_keyrings_dir: /etc/apt/keyrings
 # Note: the - removes the whitespaces from the block (arm64)
-apt_docker_arch: "{% if ansible_architecture == 'aarch64' -%} arm64 {% endif %}"
+apt_docker_arch: "{% if ansible_architecture == 'aarch64' -%} arm64 {% else -%} amd64{% endif %}"
 apt_docker_release_channel: stable
 
 ## TODO (borieher): yum
