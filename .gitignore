@@ -1,2 +1,5 @@
 *.code-workspace
 .DS_Store
+.aws
+ansible/secrets
+ansible/vars
