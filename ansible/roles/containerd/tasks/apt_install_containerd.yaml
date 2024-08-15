@@ -10,7 +10,6 @@
   ansible.builtin.apt:
     name:
       - ca-certificates
-      #- gnupg2
       - curl
     state: present
 
