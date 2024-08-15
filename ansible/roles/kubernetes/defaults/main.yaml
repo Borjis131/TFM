@@ -23,4 +23,4 @@ kubernetes_prerequisites_kernel_modules:
 ## apt
 apt_keyrings_dir: /etc/apt/keyrings
 apt_kubernetes_release_channel: stable
-apt_kubernetes_version: v1.30
+apt_kubernetes_version: v1.31

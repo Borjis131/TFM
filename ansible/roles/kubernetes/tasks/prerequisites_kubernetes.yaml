@@ -9,19 +9,21 @@
   notify: Restart host
 
 # Debian specific task
-- name: Disable swap through systemd service
-  become: yes
-  ansible.builtin.service:
-    name: dphys-swapfile
-    enabled: no
-  when: ansible_distribution == "Debian"
+# - name: Disable swap through systemd service
+#   become: yes
+#   ansible.builtin.service:
+#     name: dphys-swapfile
+#     enabled: no
+#   #TODO (borieher): This fails outside of Raspberry Pi OS
+#   when: ansible_distribution == "Debian"
 
 # Ubuntu specific tasks
 - name: Disable swap for current session
   become: yes
   ansible.builtin.command:
     cmd: swapoff -a
-  when: ansible_distribution == "Ubuntu"
+  when: ansible_distribution == "Debian"
+  #when: ansible_distribution == "Ubuntu"
 
 - name: Disable swap permanently
   become: yes
@@ -30,7 +32,8 @@
     regexp: '^(\s*)([^#\n]+\s+)(\w+\s+)swap(\s+.*)$'
     replace: '#\1\2\3swap\4'
     backup: yes
-  when: ansible_distribution == "Ubuntu"
+  when: ansible_distribution == "Debian"
+  #when: ansible_distribution == "Ubuntu"
   notify: Restart host
 
 # Execute handlers right after this
